@@ -366,6 +366,21 @@ async function handleSearchSubmit(event) {
   }
 }
 
+async function handleCountryChange() {
+  const country = getCountryByInput(elements.countryInput.value);
+
+  if (!country) {
+    return;
+  }
+
+  try {
+    await loadPlans(country.code);
+  } catch (error) {
+    renderEmptyState(error.message);
+    setStatus(elements.heroStatus, error.message, "error");
+  }
+}
+
 async function handleOrderSubmit(event) {
   event.preventDefault();
 
@@ -445,6 +460,7 @@ async function init() {
 }
 
 elements.searchForm.addEventListener("submit", handleSearchSubmit);
+elements.countryInput.addEventListener("change", handleCountryChange);
 elements.durationFilter.addEventListener("change", applyPlanFilters);
 elements.dataFilter.addEventListener("change", applyPlanFilters);
 elements.planTypeFilter.addEventListener("change", applyPlanFilters);

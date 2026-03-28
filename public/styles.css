@@ -76,13 +76,13 @@ textarea {
 
 .brand {
   display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 0.8;
-  text-transform: lowercase;
+  align-items: center;
+}
+
+.brand-logo {
+  display: block;
+  height: 56px;
+  width: auto;
 }
 
 .site-nav {
@@ -581,10 +581,11 @@ h3 {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.footer-brand {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
+.footer-logo {
+  display: block;
+  height: 64px;
+  width: auto;
+  margin-bottom: 12px;
 }
 
 .footer-links {
