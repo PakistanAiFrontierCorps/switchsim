@@ -1,0 +1,25 @@
+{
+  "name": "esim-roamify-showcase",
+  "version": "1.0.0",
+  "description": "Lightweight full-stack eSIM storefront using Express and the Roamify API",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "check": "node --check src/server.js && node --check src/routes/plans.js && node --check src/routes/order.js && node --check src/routes/countries.js && node --check src/services/roamifyService.js && node --check src/services/roamifyClient.js && node --check public/script.js"
+  },
+  "keywords": [
+    "esim",
+    "express",
+    "roamify"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

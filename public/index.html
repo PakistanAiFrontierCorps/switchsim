@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>World eSIM | Seamless Connection Anywhere</title>
+    <meta
+      name="description"
+      content="Responsive eSIM storefront inspired by the provided design and powered by a secure Express proxy for the Roamify API."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="#hero" aria-label="World eSIM home">
+          <span class="brand-mark">world</span>
+          <span class="brand-mark">world</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#hero">Home</a>
+          <a href="#plans">Plans</a>
+          <a href="#how-it-works">Data Plan</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact Us</a>
+        </nav>
+
+        <button class="nav-button" type="button">Login</button>
+      </header>
+
+      <main>
+        <section class="hero section" id="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Mobile data everywhere</p>
+            <h1>Seamless Connection in Any Country You Visit</h1>
+            <p class="hero-text">
+              Enter your destination to explore live eSIM plans securely served through the backend.
+            </p>
+
+            <form class="search-form" id="search-form">
+              <label class="sr-only" for="country-search">Select destination</label>
+              <select
+                id="country-search"
+                name="country"
+              >
+                <option value="">Select a country</option>
+              </select>
+              <button type="submit">Search</button>
+            </form>
+
+            <p class="status-line" id="hero-status" role="status" aria-live="polite">
+              Loading supported destinations...
+            </p>
+          </div>
+
+          <section class="plans-preview" id="plans" aria-labelledby="plans-heading">
+            <div class="section-title-row">
+              <div>
+                <p class="eyebrow">Popular plans</p>
+                <h2 id="plans-heading">Featured eSIM packages</h2>
+              </div>
+              <span class="destination-pill" id="selected-destination">United States</span>
+            </div>
+
+            <div class="plans-toolbar" aria-label="Plan filters">
+              <label class="filter-field">
+                <span>Duration</span>
+                <select id="duration-filter">
+                  <option value="">Any duration</option>
+                </select>
+              </label>
+
+              <label class="filter-field">
+                <span>Data</span>
+                <select id="data-filter">
+                  <option value="">Any data</option>
+                </select>
+              </label>
+
+              <label class="filter-field">
+                <span>Plan type</span>
+                <select id="plan-type-filter">
+                  <option value="all">All plans</option>
+                  <option value="fixed">Fixed data</option>
+                  <option value="unlimited">Unlimited</option>
+                </select>
+              </label>
+
+              <label class="filter-field">
+                <span>Sort by</span>
+                <select id="sort-filter">
+                  <option value="recommended">Recommended</option>
+                  <option value="price-asc">Price: Low to high</option>
+                  <option value="price-desc">Price: High to low</option>
+                  <option value="duration-asc">Duration: Shortest first</option>
+                  <option value="duration-desc">Duration: Longest first</option>
+                  <option value="data-asc">Data: Smallest first</option>
+                  <option value="data-desc">Data: Largest first</option>
+                </select>
+              </label>
+            </div>
+
+            <p class="plans-meta" id="plans-meta" role="status" aria-live="polite"></p>
+
+            <div class="plans-grid" id="plans-grid" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <section class="section section-panel" id="how-it-works">
+          <div class="section-heading">
+            <p class="eyebrow">How eSIM works</p>
+            <h2>Go online in minutes</h2>
+            <p class="section-copy">
+              Purchase, receive, install, and connect without waiting on a physical SIM delivery.
+            </p>
+          </div>
+
+          <div class="steps-grid">
+            <article class="step-card">
+              <span class="step-number">1</span>
+              <h3>Choose a destination</h3>
+              <p>Search for a country and compare the best matching packages.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">2</span>
+              <h3>Buy your eSIM</h3>
+              <p>Select a plan and create an order through the secure backend route.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">3</span>
+              <h3>Install after checkout</h3>
+              <p>Roamify returns the order details you need for the next activation step.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">4</span>
+              <h3>Connect instantly</h3>
+              <p>Use your mobile data abroad with hotspot and roaming support where available.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section about-section" id="about">
+          <div class="about-copy">
+            <p class="eyebrow">About us</p>
+            <h2>Redefining Connectivity with eSIM Technology</h2>
+            <p>
+              This implementation mirrors the provided visual direction while keeping the stack lean:
+              a static frontend, a small Express backend, and secure Roamify API integration through
+              environment-based credentials.
+            </p>
+            <div class="cta-row">
+              <a class="primary-link" href="#plans">Buy Now</a>
+              <a class="secondary-link" href="#contact">Let's talk</a>
+            </div>
+          </div>
+
+          <div class="innovation-grid" aria-label="Innovation highlights">
+            <div class="metric-bubble">
+              <strong>50M</strong>
+              <span>Global users</span>
+            </div>
+            <div class="metric-bubble accent">
+              <strong>106+</strong>
+              <span>Countries</span>
+            </div>
+            <div class="metric-bubble small">
+              <strong>99%</strong>
+              <span>Uptime</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section guarantee-section">
+          <div class="feature-strip">
+            <article class="feature-box">
+              <h3>Mobile data only</h3>
+              <p>Focused plans for travelers who need fast setup.</p>
+            </article>
+            <article class="feature-box">
+              <h3>Multi-network</h3>
+              <p>Carrier coverage pulled from the live package response.</p>
+            </article>
+            <article class="feature-box">
+              <h3>Roam ready</h3>
+              <p>Roaming support surfaced directly from the API response.</p>
+            </article>
+            <article class="feature-box">
+              <h3>Usage support</h3>
+              <p>Highlights packages that support usage checks.</p>
+            </article>
+          </div>
+
+          <div class="guarantee-copy">
+            <p class="eyebrow">Money-back guarantee</p>
+            <h2>Clear plan details, secure ordering, no exposed keys</h2>
+            <p>
+              The frontend never talks to Roamify directly. Orders are created server-side with the
+              access token stored in the environment.
+            </p>
+          </div>
+        </section>
+
+        <section class="section faq-section" id="faq">
+          <div class="faq-layout">
+            <div>
+              <p class="eyebrow">Frequently asked questions</p>
+              <h2>Common questions before checkout</h2>
+              <div class="faq-list">
+                <details open>
+                  <summary>Can I filter by a specific country?</summary>
+                  <p>Yes. Search by country name or ISO code and the app requests plans for that destination.</p>
+                </details>
+                <details>
+                  <summary>How does ordering work?</summary>
+                  <p>Pick a plan, confirm the quantity, and the backend sends a secure order request to Roamify.</p>
+                </details>
+                <details>
+                  <summary>Does this expose the API token?</summary>
+                  <p>No. The token stays on the server in `.env`, and the frontend only calls local Express routes.</p>
+                </details>
+                <details>
+                  <summary>What if a plan includes throttling?</summary>
+                  <p>The card will show the throttle note when Roamify marks the package as throttled.</p>
+                </details>
+              </div>
+            </div>
+
+            <aside class="faq-cta">
+              <h3>Still have a comment?</h3>
+              <p>Use the contact form below to capture a lead or support request in the next iteration.</p>
+              <a class="primary-link" href="#contact">Continue</a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section contact-section" id="contact">
+          <div class="section-heading">
+            <p class="eyebrow">Contact us</p>
+            <h2>Send a message</h2>
+          </div>
+
+          <div class="contact-layout">
+            <form class="contact-form" id="contact-form">
+              <label>
+                <span>Name</span>
+                <input type="text" name="name" placeholder="Your name" required />
+              </label>
+              <label>
+                <span>Email</span>
+                <input type="email" name="email" placeholder="name@example.com" required />
+              </label>
+              <label>
+                <span>Reason</span>
+                <input type="text" name="reason" placeholder="Partnership" required />
+              </label>
+              <label>
+                <span>Message</span>
+                <textarea name="message" rows="5" placeholder="Tell us about your request" required></textarea>
+              </label>
+              <button class="submit-button" type="submit">Send message</button>
+              <p class="status-line" id="contact-status" role="status" aria-live="polite"></p>
+            </form>
+
+            <div class="contact-card">
+              <h3>Operations</h3>
+              <ul>
+                <li>Secure backend proxy for Roamify API requests</li>
+                <li>Responsive static frontend with no exposed secrets</li>
+                <li>Live country and plan data rendered at runtime</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div>
+          <p class="footer-brand">World eSIM</p>
+          <p>Built for travel connectivity with a lightweight full-stack architecture.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#plans">Plans</a>
+          <a href="#about">About</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </footer>
+    </div>
+
+    <dialog class="order-modal" id="order-modal">
+      <form class="order-form" id="order-form" method="dialog">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Checkout</p>
+            <h2 id="modal-plan-title">Selected Plan</h2>
+          </div>
+          <button class="close-button" type="button" id="close-modal" aria-label="Close order form">
+            Close
+          </button>
+        </div>
+
+        <div class="order-summary" id="order-summary"></div>
+
+        <label>
+          <span>Quantity</span>
+          <input id="order-quantity" type="number" min="1" value="1" required />
+        </label>
+
+        <label>
+          <span>Reference ID (optional)</span>
+          <input id="order-reference" type="text" placeholder="trip-2026-london" />
+        </label>
+
+        <button class="submit-button" id="order-submit" type="submit">Place order</button>
+        <p class="status-line" id="order-status" role="status" aria-live="polite"></p>
+      </form>
+    </dialog>
+
+    <template id="plan-card-template">
+      <article class="plan-card">
+        <p class="plan-badge"></p>
+        <p class="plan-location"></p>
+        <div class="plan-main">
+          <h3 class="plan-size"></h3>
+          <p class="plan-title"></p>
+          <p class="plan-price"></p>
+        </div>
+        <ul class="plan-features"></ul>
+        <button class="buy-button" type="button">Buy Now</button>
+      </article>
+    </template>
+
+    <script src="/script.js" defer></script>
+  </body>
+</html>
