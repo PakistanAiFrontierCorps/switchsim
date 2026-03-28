@@ -20,6 +20,10 @@ const publicDir = path.join(__dirname, "..", "public");
 app.use(express.json());
 app.use(express.static(publicDir));
 
+app.get("/healthz", (_request, response) => {
+  response.status(200).json({ ok: true });
+});
+
 app.get("/api/config-status", (_request, response) => {
   response.json({
     configured: Boolean(roamifyAccessToken),
