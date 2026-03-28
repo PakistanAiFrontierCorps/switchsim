@@ -171,10 +171,10 @@ h3 {
 .search-form {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
-  max-width: 540px;
+  gap: 10px;
+  max-width: 520px;
   margin: 26px auto 10px;
-  padding: 14px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
@@ -232,6 +232,9 @@ h3 {
   margin: 12px 0 0;
   min-height: 24px;
   color: var(--muted);
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-title-row,
@@ -670,7 +673,6 @@ h3 {
 
 @media (min-width: 700px) {
   .search-form {
-    grid-template-columns: 1fr auto;
     align-items: center;
   }
 
