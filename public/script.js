@@ -33,9 +33,7 @@ const elements = {
 
 async function request(path, options = {}) {
   const response = await fetch(path, {
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     ...options
   });
 
@@ -56,15 +54,12 @@ async function request(path, options = {}) {
 function setStatus(node, message, tone = "") {
   node.textContent = message;
   node.classList.remove("success", "error");
-  if (tone) {
-    node.classList.add(tone);
-  }
+  if (tone) node.classList.add(tone);
 }
 
 function renderLoadingCards() {
   elements.plansGrid.innerHTML = "";
-
-  for (let index = 0; index < 3; index += 1) {
+  for (let index = 0; index < 3; index++) {
     const card = document.createElement("div");
     card.className = "loading-card";
     elements.plansGrid.append(card);
@@ -88,20 +83,13 @@ function getPlanDuration(plan) {
 }
 
 function getPlanDataValue(plan) {
-  if (plan.isUnlimited) {
-    return Number.POSITIVE_INFINITY;
-  }
+  if (plan.isUnlimited) return Number.POSITIVE_INFINITY;
 
   const amount = Number(plan.dataAmount);
   const unit = String(plan.dataUnit || "").toUpperCase();
 
-  if (!Number.isFinite(amount)) {
-    return 0;
-  }
-
-  if (unit === "GB") {
-    return amount * 1024;
-  }
+  if (!Number.isFinite(amount)) return 0;
+  if (unit === "GB") return amount * 1024;
 
   return amount;
 }
@@ -112,6 +100,9 @@ function getCountryByInput(value) {
 
 function renderPlans(plans) {
   elements.plansGrid.innerHTML = "";
+
+  // LIMIT TO 7 PLANS ONLY
+  plans = plans.slice(0, 7);
 
   if (!plans.length) {
     renderEmptyState("No plans match your current filters.");
@@ -151,7 +142,6 @@ function renderPlans(plans) {
     });
 
     buyButton.addEventListener("click", () => openOrderModal(plan.id));
-
     elements.plansGrid.append(card);
   });
 }
@@ -159,9 +149,11 @@ function renderPlans(plans) {
 function populateFilters(plans) {
   const selectedDuration = elements.durationFilter.value;
   const selectedData = elements.dataFilter.value;
+
   const durations = [...new Set(plans.map((plan) => getPlanDuration(plan)).filter(Boolean))].sort(
-    (left, right) => left - right
+    (a, b) => a - b
   );
+
   const dataOptions = [...new Map(
     plans.map((plan) => {
       const key = plan.isUnlimited ? "unlimited" : `${plan.dataAmount}-${plan.dataUnit}`;
@@ -185,13 +177,11 @@ function populateFilters(plans) {
     elements.dataFilter.append(option);
   });
 
-  if ([...elements.durationFilter.options].some((option) => option.value === selectedDuration)) {
+  if ([...elements.durationFilter.options].some((o) => o.value === selectedDuration))
     elements.durationFilter.value = selectedDuration;
-  }
 
-  if ([...elements.dataFilter.options].some((option) => option.value === selectedData)) {
+  if ([...elements.dataFilter.options].some((o) => o.value === selectedData))
     elements.dataFilter.value = selectedData;
-  }
 }
 
 function getRecommendedScore(plan) {
@@ -206,20 +196,20 @@ function sortPlans(plans, sortValue) {
 
   switch (sortValue) {
     case "price-asc":
-      return sortedPlans.sort((left, right) => left.price - right.price);
+      return sortedPlans.sort((a, b) => a.price - b.price);
     case "price-desc":
-      return sortedPlans.sort((left, right) => right.price - left.price);
+      return sortedPlans.sort((a, b) => b.price - a.price);
     case "duration-asc":
-      return sortedPlans.sort((left, right) => getPlanDuration(left) - getPlanDuration(right));
+      return sortedPlans.sort((a, b) => getPlanDuration(a) - getPlanDuration(b));
     case "duration-desc":
-      return sortedPlans.sort((left, right) => getPlanDuration(right) - getPlanDuration(left));
+      return sortedPlans.sort((a, b) => getPlanDuration(b) - getPlanDuration(a));
     case "data-asc":
-      return sortedPlans.sort((left, right) => getPlanDataValue(left) - getPlanDataValue(right));
+      return sortedPlans.sort((a, b) => getPlanDataValue(a) - getPlanDataValue(b));
     case "data-desc":
-      return sortedPlans.sort((left, right) => getPlanDataValue(right) - getPlanDataValue(left));
+      return sortedPlans.sort((a, b) => getPlanDataValue(b) - getPlanDataValue(a));
     case "recommended":
     default:
-      return sortedPlans.sort((left, right) => getRecommendedScore(right) - getRecommendedScore(left));
+      return sortedPlans.sort((a, b) => getRecommendedScore(b) - getRecommendedScore(a));
   }
 }
 
@@ -230,23 +220,14 @@ function applyPlanFilters() {
   const sortValue = elements.sortFilter.value;
 
   const filteredPlans = state.allPlans.filter((plan) => {
-    if (selectedDuration && String(getPlanDuration(plan)) !== selectedDuration) {
-      return false;
-    }
+    if (selectedDuration && String(getPlanDuration(plan)) !== selectedDuration) return false;
 
-    if (selectedType === "unlimited" && !plan.isUnlimited) {
-      return false;
-    }
-
-    if (selectedType === "fixed" && plan.isUnlimited) {
-      return false;
-    }
+    if (selectedType === "unlimited" && !plan.isUnlimited) return false;
+    if (selectedType === "fixed" && plan.isUnlimited) return false;
 
     if (selectedData) {
       const planDataKey = plan.isUnlimited ? "unlimited" : `${plan.dataAmount}-${plan.dataUnit}`;
-      if (planDataKey !== selectedData) {
-        return false;
-      }
+      if (planDataKey !== selectedData) return false;
     }
 
     return true;
@@ -259,7 +240,8 @@ function applyPlanFilters() {
 
 async function loadCountries() {
   const data = await request("/api/countries");
-  state.countries = data.countries || [];
+  // LIMIT COUNTRIES TO 10
+  state.countries = (data.countries || []).slice(0, 10);
 
   const optionsMarkup = state.countries
     .map((country) => `<option value="${country.code}">${country.name}</option>`)
@@ -289,9 +271,7 @@ async function loadPlans(countryCode = state.selectedCountryCode) {
 
   state.selectedCountryCode = countryCode;
 
-  if (selectedCountry) {
-    elements.destinationPill.textContent = selectedCountry.name;
-  }
+  if (selectedCountry) elements.destinationPill.textContent = selectedCountry.name;
 
   state.allPlans = plans;
   populateFilters(plans);
@@ -328,11 +308,8 @@ async function openOrderModal(planId) {
     buildOrderSummary(state.selectedPlan);
     setStatus(elements.orderStatus, "Review your order before placing it.");
 
-    if (typeof elements.orderModal.showModal === "function") {
-      elements.orderModal.showModal();
-    } else {
-      elements.orderModal.setAttribute("open", "open");
-    }
+    if (typeof elements.orderModal.showModal === "function") elements.orderModal.showModal();
+    else elements.orderModal.setAttribute("open", "open");
   } catch (error) {
     setStatus(elements.heroStatus, error.message, "error");
   } finally {
@@ -341,11 +318,8 @@ async function openOrderModal(planId) {
 }
 
 function closeOrderModal() {
-  if (typeof elements.orderModal.close === "function") {
-    elements.orderModal.close();
-  } else {
-    elements.orderModal.removeAttribute("open");
-  }
+  if (typeof elements.orderModal.close === "function") elements.orderModal.close();
+  else elements.orderModal.removeAttribute("open");
 }
 
 async function handleSearchSubmit(event) {
@@ -368,10 +342,7 @@ async function handleSearchSubmit(event) {
 
 async function handleCountryChange() {
   const country = getCountryByInput(elements.countryInput.value);
-
-  if (!country) {
-    return;
-  }
+  if (!country) return;
 
   try {
     await loadPlans(country.code);
@@ -383,7 +354,6 @@ async function handleCountryChange() {
 
 async function handleOrderSubmit(event) {
   event.preventDefault();
-
   if (!state.selectedPlan) {
     setStatus(elements.orderStatus, "Select a plan first.", "error");
     return;
@@ -395,21 +365,13 @@ async function handleOrderSubmit(event) {
 
     const payload = {
       items: [
-        {
-          packageId: state.selectedPlan.id,
-          quantity: Number(elements.orderQuantity.value)
-        }
+        { packageId: state.selectedPlan.id, quantity: Number(elements.orderQuantity.value) }
       ]
     };
 
-    if (elements.orderReference.value.trim()) {
-      payload.referenceId = elements.orderReference.value.trim();
-    }
+    if (elements.orderReference.value.trim()) payload.referenceId = elements.orderReference.value.trim();
 
-    const data = await request("/api/order", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
+    const data = await request("/api/order", { method: "POST", body: JSON.stringify(payload) });
 
     const orderId = data.order.id || data.order.referenceId || "created";
     setStatus(elements.orderStatus, `Order created successfully. Reference: ${orderId}`, "success");
@@ -459,6 +421,7 @@ async function init() {
   }
 }
 
+// EVENT LISTENERS
 elements.searchForm.addEventListener("submit", handleSearchSubmit);
 elements.countryInput.addEventListener("change", handleCountryChange);
 elements.durationFilter.addEventListener("change", applyPlanFilters);
@@ -474,10 +437,7 @@ elements.orderModal.addEventListener("click", (event) => {
     event.clientX <= bounds.right &&
     event.clientY >= bounds.top &&
     event.clientY <= bounds.bottom;
-
-  if (!clickedInside) {
-    closeOrderModal();
-  }
+  if (!clickedInside) closeOrderModal();
 });
 elements.contactForm.addEventListener("submit", handleContactSubmit);
 
