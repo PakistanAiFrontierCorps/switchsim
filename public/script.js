@@ -300,7 +300,9 @@ async function openOrderModal(planId) {
     elements.orderSubmit.disabled = true;
     setStatus(elements.orderStatus, "Loading plan details...");
 
-    const data = await request(`/api/plans/${encodeURIComponent(planId)}`);
+    const data = await request(
+      `/api/plans/${encodeURIComponent(planId)}?country=${encodeURIComponent(state.selectedCountryCode)}`
+    );
     state.selectedPlan = data.plan;
     elements.modalPlanTitle.textContent = state.selectedPlan.title;
     elements.orderQuantity.value = 1;

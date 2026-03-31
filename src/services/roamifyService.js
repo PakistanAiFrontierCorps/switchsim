@@ -1,4 +1,6 @@
 const roamifyClient = require("./roamifyClient");
+const { ALLOWED_COUNTRIES } = require("../config/catalog");
+const { convertFromUsd } = require("./currencyService");
 const {
   pricingFixedMarkup,
   pricingMinimumPrice,
@@ -13,6 +15,10 @@ function createAppError(message, statusCode, details) {
 }
 
 function mapApiError(error) {
+  if (error.statusCode) {
+    return error;
+  }
+
   if (error.response) {
     const statusCode = error.response.status || 500;
     const responseData = error.response.data;
@@ -157,6 +163,39 @@ function normalizePlan(group, pkg) {
   };
 }
 
+function getCountryConfig(countryCode) {
+  return ALLOWED_COUNTRIES[String(countryCode || "").toUpperCase()] || null;
+}
+
+function ensureAllowedCountry(countryCode) {
+  const country = getCountryConfig(countryCode);
+
+  if (!country) {
+    throw createAppError("Country is not available in this storefront", 400);
+  }
+
+  return country;
+}
+
+async function applyCountryCurrency(plan, countryCode) {
+  const country = getCountryConfig(countryCode);
+
+  if (!country) {
+    return plan;
+  }
+
+  const convertedRetailPrice = await convertFromUsd(plan.price, country.currency);
+  const convertedWholesalePrice = await convertFromUsd(plan.wholesalePrice, country.currency);
+
+  return {
+    ...plan,
+    countryName: country.name,
+    currency: country.currency,
+    price: convertedRetailPrice,
+    wholesalePrice: convertedWholesalePrice
+  };
+}
+
 async function getCountries() {
   try {
     const response = await roamifyClient.get("/api/esim/countries");
@@ -165,8 +204,19 @@ async function getCountries() {
       code: country.code || country.countryCode || "",
       name: country.name || country.countryName || ""
     }));
+    const allowedCodes = new Set(Object.keys(ALLOWED_COUNTRIES));
 
-    return countries.sort((left, right) => left.name.localeCompare(right.name));
+    return countries
+      .filter((country) => allowedCodes.has(country.code))
+      .map((country) => {
+        const allowedCountry = ALLOWED_COUNTRIES[country.code];
+        return {
+          ...country,
+          name: allowedCountry.name,
+          currency: allowedCountry.currency
+        };
+      })
+      .sort((left, right) => left.name.localeCompare(right.name));
   } catch (error) {
     throw mapApiError(error);
   }
@@ -185,7 +235,7 @@ function buildPlansQuery(filters = {}) {
   const query = {};
 
   if (filters.country) {
-    query.country = String(filters.country).toUpperCase();
+    query.country = ensureAllowedCountry(filters.country).code;
   }
 
   if (filters.geography) {
@@ -214,6 +264,7 @@ function buildPlansQuery(filters = {}) {
 
 async function getPlans(filters = {}) {
   try {
+    const requestedCountryCode = filters.country ? ensureAllowedCountry(filters.country).code : null;
     const response = await roamifyClient.get("/api/esim/packages", {
       params: buildPlansQuery(filters)
     });
@@ -222,15 +273,18 @@ async function getPlans(filters = {}) {
     const plans = groups.flatMap((group) =>
       (group.packages || []).map((pkg) => normalizePlan(group, pkg))
     );
+    const localizedPlans = requestedCountryCode
+      ? await Promise.all(plans.map((plan) => applyCountryCurrency(plan, requestedCountryCode)))
+      : plans;
 
-    return plans.sort((left, right) => left.price - right.price || left.day - right.day);
+    return localizedPlans.sort((left, right) => left.price - right.price || left.day - right.day);
   } catch (error) {
     throw mapApiError(error);
   }
 }
 
-async function getPlanById(packageId) {
-  const plans = await getPlans({ packageId });
+async function getPlanById(packageId, filters = {}) {
+  const plans = await getPlans({ ...filters, packageId });
   const plan = plans.find((item) => item.id === packageId);
 
   if (!plan) {

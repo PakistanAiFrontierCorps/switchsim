@@ -14,7 +14,7 @@ router.get("/", async (request, response, next) => {
 
 router.get("/:id", async (request, response, next) => {
   try {
-    const plan = await getPlanById(request.params.id);
+    const plan = await getPlanById(request.params.id, request.query);
     response.json({ plan });
   } catch (error) {
     next(error);
